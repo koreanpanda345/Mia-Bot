@@ -6,7 +6,7 @@ Creator.Command({
   invoke: async (ctx, args) => {
     await ctx.reply({
       ephemeral: true,
-      content: "Pong! Motherfucker",
+      content: "Pong!",
     });
   },
 });

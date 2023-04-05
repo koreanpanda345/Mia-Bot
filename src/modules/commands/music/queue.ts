@@ -25,12 +25,15 @@ Creator.Command({
 
     let amount = queue.tracks.size > 25 ? 25 : queue.tracks.size;
 
-    for (let i = 1; i <= amount; ++i) {
+    let q = queue.tracks.toArray();
+    let i = 0;
+    q.forEach((x) => {
+      i += 1;
       embed.addFields({
-        name: `${queue.tracks.at(i)?.title}`,
-        value: `Duration: ${queue.tracks.at(i)?.duration}`,
+        name: `${i} - ${x.title}`,
+        value: `Duration: ${x.duration}`,
       });
-    }
+    });
 
     embed.setColor("Green");
 

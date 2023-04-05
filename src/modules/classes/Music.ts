@@ -116,7 +116,7 @@ export class Music {
       await this.queue.connect(this.member?.voice.channelId!, {
         deaf: true,
       });
-
+      cache.music.queue.set(this.ctx.guildId as string, this.queue);
       return this.queue;
     } catch (err) {
       this._logger.error(err);

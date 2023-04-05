@@ -1,6 +1,7 @@
 import { Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Creator from "../../../utils/creator";
 import cache from "../../../core/cache";
+import { Music } from "../../classes/Music";
 
 let data = new SlashCommandBuilder()
   .setName("skip")
@@ -9,74 +10,48 @@ let data = new SlashCommandBuilder()
 Creator.Command({
   data,
   invoke: async (ctx, args) => {
-    const music = cache.music.player.get(ctx.guildId as string);
+    let music = cache.music.player.get(ctx.guildId as string);
+
+    if (!music) {
+      music = new Music(ctx);
+
+      cache.music.player.set(ctx.guildId as string, music);
+    }
 
     await ctx.deferReply({
       ephemeral: true,
     });
 
-    const check = await music?.checkAvailibility();
-    if (check) {
-      return await ctx.followUp({
-        embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(check)],
-        ephemeral: true,
-      });
-    }
-
-    const queue = await music?.getQueue();
-
-    if (!music?.isPlaying())
-      return await ctx.followUp({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(Colors.Red)
-            .setDescription("There is no song playing right now"),
-        ],
-      });
+    let queue = await music.getQueue();
 
     if (!queue) {
-      return await ctx.followUp({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(Colors.Red)
-            .setDescription("Queue ended. Silence...."),
-        ],
+      return ctx.followUp({
+        content: "There is no queue",
         ephemeral: true,
       });
     }
+    let currentTrack = queue.currentTrack;
+    let queuedTracks = music.getQueuedTracks();
 
-    const previousTrack = queue.currentTrack;
-    const queuedTracks = (await music.getQueuedTracks())!.data;
-
-    if (queue.tracks.size < 0) await music.play();
-    else await queue.node.skip();
-
-    const nextSong = queuedTracks[0];
-
-    if (!nextSong)
-      return await ctx
-        .followUp({
-          embeds: [
-            new EmbedBuilder()
-              .setColor(Colors.Red)
-              .setDescription("Queue Ended. Silence...."),
-          ],
-          ephemeral: true,
-        })
-        .catch((e) => {});
-
+    if (queuedTracks?.size === 0) {
+      await ctx.followUp({
+        content:
+          "There isn't any songs after this song. I recommend you use the stop command",
+        ephemeral: true,
+      });
+      return;
+    }
+    let newTrack = queuedTracks?.toArray()[0];
+    await music.skip();
     let embed = new EmbedBuilder();
-    embed.setColor(Colors.Green);
+    embed.setTitle("Skipped Song");
     embed.setDescription(
-      `**${previousTrack} has been skipped` +
-        `\n----------------------------\n` +
-        `Now Playing: [${nextSong.title}](${nextSong.url})\n` +
-        `Requested by: ${nextSong.requestedBy}\n` +
-        `Duration: ${nextSong.duration}\n`
+      `Skipped **${currentTrack?.title}**\nNow going to play **${newTrack?.title}**`
     );
-
-    return await ctx.followUp({
+    embed.setColor(Colors.Green);
+    ctx.followUp({
       embeds: [embed],
+      ephemeral: true,
     });
   },
 });

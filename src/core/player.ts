@@ -8,6 +8,10 @@ const player = new Player(client, {
 });
 const logger = new Logger("Music Player");
 
+player.events.on("debug", (queue, message) => {
+  logger.debug(message);
+});
+
 player.events.on("playerError", (queue, error, track) => {
   queue.channel?.send(`Error: ${error}`);
 });

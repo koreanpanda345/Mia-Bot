@@ -40,7 +40,10 @@ Creator.Command({
       return null;
     }
 
-    if (!((await ctx.guild?.members.fetchMe())!.voice.channel !== channel)) {
+    if (
+      (await ctx.guild?.members.fetchMe())?.voice.channel &&
+      (await ctx.guild?.members.fetchMe())!.voice.channel !== channel
+    ) {
       await ctx.reply(
         "It seems like someone is already using me. Please wait your turn, or join the same vc as me and queue some tracks ^-^"
       );
@@ -77,6 +80,8 @@ Creator.Command({
         ephemeral: true,
         content: `Playing Playlist \`${playlist.name}\``,
       });
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   },
 });

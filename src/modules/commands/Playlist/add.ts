@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Creator from "../../../utils/creator";
 import cache from "../../../core/cache";
 import { createUser, updateCache } from "../../../core/mongodb";
@@ -60,9 +60,19 @@ Creator.Command({
               await user?.save().then(async () => {
                 await updateCache();
               });
+
+              let embed = new EmbedBuilder();
+
+              embed.setTitle("Added a new track to the playlist");
+              embed.setDescription(
+                `**${val.tracks[0].title}**\nChannel: ${val.tracks[0].author}\nDuration: ${val.tracks[0].duration}`
+              );
+              embed.setColor(Colors.Green);
+              embed.setImage(val.tracks[0].thumbnail);
+
               ctx.followUp({
                 ephemeral: true,
-                content: `Added Track(s) to playlist \`${playlist}\``,
+                embeds: [embed],
               });
             }
           });

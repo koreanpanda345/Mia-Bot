@@ -49,6 +49,14 @@ export class Music {
     return this.queue && this.queue.node.isPaused();
   }
 
+  public async search(name: string) {
+    let result = await this.player.search(name, {
+      searchEngine: "youtube",
+    });
+
+    return result;
+  }
+
   public async play() {
     try {
       await this.queue?.node.play();
@@ -79,5 +87,57 @@ export class Music {
 
   public async getQueue() {
     return useQueue(this.ctx.guildId as string);
+  }
+
+  public async createQueue() {
+    if (this.queue) return this.queue;
+
+    try {
+      this.queue = this.player.nodes.create(this.ctx.guildId!, {
+        metadata: {
+          channel: this.ctx.channel,
+          requestedBy: this.ctx.user,
+        },
+        leaveOnEmpty: false,
+        leaveOnEndCooldown: 60000 * 5,
+        leaveOnEnd: false,
+        leaveOnEmptyCooldown: 60000 * 5,
+        leaveOnStop: false,
+        skipOnNoStream: true,
+        volume: 5,
+      });
+      let member = await this.ctx.guild?.members.fetch(this.ctx.user.id);
+      await this.queue.connect(member!.voice.channelId!, {
+        deaf: true,
+      });
+
+      return this.queue;
+    } catch (error) {
+      await Handler.Task("error_handler", error, this.ctx);
+      return false;
+    }
+  }
+
+  public async disconnect() {
+    try {
+      this.destroy();
+    } catch (error) {
+      let me = await this.ctx.guild?.members.fetchMe();
+      await me?.voice.disconnect();
+    }
+  }
+
+  public async checkAvailibility(play: boolean = false) {
+    if (!(await this.isUserInChannel()))
+      return "You are not in a voice channel to use this command!";
+    else if (await this.isBotInAnotherChannel())
+      return "I am already in another voice channel! Please join that channel or wait until I leave!";
+    else if (!(await this.isBotInAVoiceChannel()) && !play)
+      return "I am not in a voice channel! Please let me join your channel first by using the play command!";
+    else return false;
+  }
+
+  public getQueuedTracks() {
+    return this.queue?.tracks;
   }
 }

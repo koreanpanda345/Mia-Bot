@@ -1,7 +1,7 @@
 import client from "./core/client";
 import { runMongoose } from "./core/mongodb";
 import loadFolder from "./utils/loader";
-
+// Using .env for configurations
 require("dotenv").config();
 
 (async () => {

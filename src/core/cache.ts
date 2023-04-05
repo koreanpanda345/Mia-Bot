@@ -10,12 +10,18 @@ import { GuildQueue } from "discord-player";
 import { Music } from "../modules/classes/Music";
 
 const cache = {
+  /**
+   * Contains all of the caching related to the bot
+   */
   bot: {
     commands: new Collection<string, CommandType>(),
     events: new Collection<string, EventType>(),
     monitors: new Collection<string, MonitorType>(),
     tasks: new Collection<string, TaskType>(),
   },
+  /**
+   * Contains all of the caching related to the database
+   */
   database: {
     guild_configuration: new Collection<
       string,
@@ -32,10 +38,13 @@ const cache = {
         }
     >(),
   },
+  /**
+   * Contains all of the caching related to the music player.
+   */
   music: {
     queue: new Collection<string, GuildQueue<unknown>>(),
     player: new Collection<string, Music>(),
-  }
+  },
 };
 
 export default cache;

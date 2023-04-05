@@ -5,6 +5,10 @@ import Logger from "../../../core/logger";
 import cache from "../../../core/cache";
 import { createGuildConfig } from "../../../core/mongodb";
 
+/**
+ * Handles The Guild Create Event
+ * Executes when the bot joins a new Guild.
+ */
 Creator.Event({
 	name: "Guild Create",
 	id: "guildCreate",

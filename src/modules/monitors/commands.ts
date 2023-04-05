@@ -3,7 +3,9 @@ import Creator from "../../utils/creator";
 import cache from "../../core/cache";
 import Logger from "../../core/logger";
 import Handler from "../../utils/handler";
-
+/**
+ * Handles the Slash Commands
+ */
 Creator.Monitor({
 	name: "slash_command",
 	invoke: async (ctx: CommandInteraction) => {

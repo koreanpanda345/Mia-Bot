@@ -1,3 +1,7 @@
+/**
+ * Handles the deployment of our slash commands
+ */
+
 import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
 import Logger from "../core/logger";
 import cache from "../core/cache";

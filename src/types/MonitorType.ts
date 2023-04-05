@@ -1,3 +1,6 @@
+/**
+ * Type of Monitor
+ */
 export type MonitorType = {
 	name: string;
 	disabled?: boolean;

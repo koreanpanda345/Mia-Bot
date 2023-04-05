@@ -1,3 +1,6 @@
+/**
+ * Type of Event
+ */
 export type EventType = {
   name: string;
   id: string;

@@ -1,7 +1,9 @@
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 import Logger from "../../core/logger";
 import Creator from "../../utils/creator";
-
+/**
+ * Handles all of the error handling if needed!
+ */
 Creator.Task({
   name: "error_handler",
   invoke: async (err: any, ctx?: CommandInteraction) => {

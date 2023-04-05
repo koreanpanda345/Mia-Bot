@@ -6,7 +6,9 @@ import Logger from "../core/logger";
 import cache from "../core/cache";
 
 const logger = new Logger("Handler");
-
+/**
+ * Contains the handler methods.
+ */
 const Handler = {
   /**
    * Handles Slash Commands
@@ -51,7 +53,12 @@ const Handler = {
       return null;
     }
   },
-
+  /**
+   * Handles the execution of monitors.
+   * @param name - Name of monitor
+   * @param args - the arguments that the monitor will be using.
+   * @returns 
+   */
   Monitor: async (name: string, ...args: any[]) => {
     try {
       const monitor = cache.bot.monitors.get(name);
@@ -70,6 +77,12 @@ const Handler = {
       return null;
     }
   },
+  /**
+   * Handles the execution of tasks.
+   * @param name - Name of taks
+   * @param args - the arguments that the task will be using.
+   * @returns 
+   */
   Task: async (name: string, ...args: any[]) => {
     try {
       const task = cache.bot.tasks.get(name);

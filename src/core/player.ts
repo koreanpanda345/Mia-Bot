@@ -1,3 +1,6 @@
+/**
+ * Our music player
+ */
 import { Player } from "discord-player";
 import client from "./client";
 import Logger from "./logger";

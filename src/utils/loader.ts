@@ -1,6 +1,11 @@
 import { sync } from "glob";
 import Logger from "../core/logger";
 
+/**
+ * Loads the directory
+ * @param dir - directory to load
+ * @returns
+ */
 export default async function loadFolder(dir: string) {
   let status = process.env.STATUS as string;
   const logger = new Logger("Loader");

@@ -6,7 +6,11 @@ interface ILogger {
   warn(message: any): void;
   error(message: any): void;
 }
-
+/**
+ * Logger Class
+ * 
+ * To be used as a logger
+ */
 export default class Logger implements ILogger {
   private _logger: winston.Logger;
   private _defaultFormat = winston.format.printf(

@@ -1,3 +1,8 @@
+/**
+ * We are using mongodb to handle all of our data.
+ *
+ * But since it is bad practice to make too many api requests to one service, we enter that data into our cache to be used when searching.
+ */
 import { connect } from "mongoose";
 import GuildConfigurations from "../models/GuildConfigurations";
 import cache from "./cache";
@@ -14,8 +19,8 @@ export async function createUser(userId: string) {
   const newUser = new Users({
     user_id: userId,
     music: {
-      playlist: []
-    }
+      playlist: [],
+    },
   });
 
   await newUser.save();

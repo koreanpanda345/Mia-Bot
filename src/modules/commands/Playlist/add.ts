@@ -16,15 +16,16 @@ let data = new SlashCommandBuilder()
   .addStringOption((options) => {
     options.setName("track");
     options.setDescription("the track name");
-    return options;
-  })
-  .addStringOption((options) => {
-    options.setName("playlist_url");
-    options.setDescription(
-      "Put the youtube playlist url to add all of the tracks in."
-    );
+    options.setRequired(true);
     return options;
   });
+// .addStringOption((options) => {
+//   options.setName("playlist_url");
+//   options.setDescription(
+//     "Put the youtube playlist url to add all of the tracks in."
+//   );
+//   return options;
+// });
 Creator.Command({
   data,
   invoke: async (ctx, args) => {
@@ -32,7 +33,7 @@ Creator.Command({
     if (!user) await createUser(ctx.user.id);
     let playlist = args.getString("playlist");
     let track = args.getString("track");
-    let ytUrl = args.getString("playlist_url");
+    //let ytUrl = args.getString("playlist_url");
 
     let _playlist = user?.music.playlist.find(
       (x) => x.name.toLowerCase() === playlist?.toLowerCase()
@@ -45,7 +46,9 @@ Creator.Command({
       });
       return;
     }
-    await ctx.deferReply();
+    await ctx.deferReply({
+      ephemeral: true,
+    });
     try {
       const player = useMasterPlayer();
       if (!player) return;
@@ -77,9 +80,9 @@ Creator.Command({
             }
           });
       }
-      if (ytUrl) {
-        console.log(ytUrl);
-      }
+      // if (ytUrl) {
+      //   console.log(ytUrl);
+      // }
     } catch (error) {
       console.error();
       return null;

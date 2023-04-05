@@ -1,6 +1,7 @@
-import { SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Creator from "../../../utils/creator";
 import { useMasterPlayer, useQueue } from "discord-player";
+import cache from "../../../core/cache";
 let data = new SlashCommandBuilder()
   .setName("stop")
   .setDescription(
@@ -10,20 +11,27 @@ Creator.Command({
   data,
 
   invoke: async (ctx, args) => {
-	await ctx.deferReply();
-	try {
-		let player = useMasterPlayer();
-		if(!player) return;
+    await ctx.deferReply();
+    try {
+      let music = cache.music.player.get(ctx.guildId as string);
 
-		let queue = useQueue(ctx.guild?.id as string);
+      if (!music) {
+        let embed = new EmbedBuilder();
+        embed.setTitle("ERROR");
+        embed.setDescription(`There is no music playing at the moment`);
 
-		if(!queue) return ctx.followUp("There is no song playing");
+        await ctx.followUp({
+          embeds: [embed],
+          ephemeral: true,
+        });
+        return;
+      }
 
-		queue.delete();
+      await music.destroy();
 
-		return ctx.followUp("The song has stopped and the queue is cleared! I am now leaving!");
-	}catch(err) {
-
-	}
+      await ctx.followUp(
+        "I stopped the queue and cleared it! I will also be leaving the voice channel!"
+      );
+    } catch (err) {}
   },
 });

@@ -6,6 +6,8 @@ import { TaskType } from "../types/TaskType";
 import { Document, Types } from "mongoose";
 import { IGuildConfiguration } from "../models/GuildConfigurations";
 import { IUser } from "../models/Users";
+import { GuildQueue } from "discord-player";
+import { Music } from "../modules/classes/Music";
 
 const cache = {
   bot: {
@@ -30,6 +32,10 @@ const cache = {
         }
     >(),
   },
+  music: {
+    queue: new Collection<string, GuildQueue<unknown>>(),
+    player: new Collection<string, Music>(),
+  }
 };
 
 export default cache;

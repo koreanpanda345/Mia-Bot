@@ -5,7 +5,7 @@ import { CommandType } from "../types/CommandType";
 import { TaskType } from "../types/TaskType";
 import { Document, Types } from "mongoose";
 import { IGuildConfiguration } from "../models/GuildConfigurations";
-import { IMember } from "../models/Members";
+import { IUser } from "../models/Users";
 
 const cache = {
   bot: {
@@ -22,10 +22,10 @@ const cache = {
           _id: Types.ObjectId;
         }
     >(),
-    members: new Collection<
+    users: new Collection<
       string,
-      Document<unknown, any, IMember> &
-        IMember & {
+      Document<unknown, any, IUser> &
+        IUser & {
           _id: Types.ObjectId;
         }
     >(),

@@ -8,6 +8,7 @@ Creator.Event({
   invoke: async () => {
     const logger = new Logger("Ready");
     await import("./../../utils/deployer");
+    await import("./../../core/player");
     logger.info(`Bot is ready`);
   },
 });

@@ -7,6 +7,5 @@ Creator.Event({
   id: "messageCreate",
   invoke: async (msg: Message) => {
     if (msg.author.bot) return;
-    await Handler.Task("leveler", msg);
   },
 });
